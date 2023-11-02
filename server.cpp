@@ -1,10 +1,9 @@
 #include "server.h"
 
-Server::Server(QObject *parent , int port)
+Server::Server(QObject *parent)
     : QObject{parent}
 {
 
-    this->port = port;
 
     connect(&server , &QTcpServer::newConnection , this , &Server::newConnection);
 
@@ -12,14 +11,21 @@ Server::Server(QObject *parent , int port)
 }
 
 
-bool Server::start()
+bool Server::start(int port)
 {
-    if(!server.listen(QHostAddress::Any , this->port)){
+    if(!server.listen(QHostAddress::Any , port)){
         qDebug() << server.errorString();
         return false;
     }
 
     return true;
+}
+
+void Server::send(QVariantMap data, QTcpSocket *socket)
+{
+
+    QJsonDocument document = QJsonDocument::fromVariant(data);
+    socket->write(document.toJson());
 }
 
 
@@ -30,7 +36,6 @@ void Server::newConnection()
     connect(socket , &QTcpSocket::disconnected , this ,&Server::disconnected);
     connect(socket , &QTcpSocket::readyRead , this ,&Server::readyRead);
 
-    qDebug() << "Connected " << socket;
 
 
 }
@@ -39,7 +44,6 @@ void Server::newConnection()
 void Server::disconnected()
 {
     QTcpSocket* socket = qobject_cast<QTcpSocket*>(sender());
-    qDebug() << "Disconnected " << socket;
 
 
 }
@@ -47,8 +51,10 @@ void Server::disconnected()
 void Server::readyRead()
 {
     QTcpSocket* socket = qobject_cast<QTcpSocket*>(sender());
-    qDebug() << "ReadyRead " << socket;
 
+    QJsonDocument document = QJsonDocument::fromJson(socket->readAll());
+
+    emit data_recived(document , socket);
 
 }
 

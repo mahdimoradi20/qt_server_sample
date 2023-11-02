@@ -15,11 +15,12 @@ class Server : public QObject
 {
     Q_OBJECT
 public:
-    explicit Server(QObject *parent = nullptr , int port = 8080);
-    bool start();
+    explicit Server(QObject *parent = nullptr);
+    bool start(int port);
+    void send(QVariantMap data , QTcpSocket* socket);
 
 signals:
-
+    void data_recived(QJsonDocument data , QTcpSocket *socket);
 private slots:
     void newConnection();
     void disconnected();
@@ -27,7 +28,6 @@ private slots:
 
 private:
     QTcpServer server;
-    int port;
 
 };
 

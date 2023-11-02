@@ -11,6 +11,12 @@
 #include<QSqlDatabase>
 #include<QSqlQuery>
 #include "showusersdialog.h"
+#include "server.h"
+#include<QTcpServer>
+#include<QTcpSocket>
+#include<QJsonArray>
+#include<QJsonObject>
+#include<QJsonDocument>
 
 #include<QStringList>
 
@@ -33,8 +39,12 @@ private slots:
 
     void on_show_all_users_triggered();
 
+    void data_recived(QJsonDocument data , QTcpSocket *socket);
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
+    Server server;
+    QString register_new_access_token(int user_id);
 };
 #endif // MAINWINDOW_H
