@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
         QMessageBox::critical(this , "خطا" , "خطای برقراری ارتباط با پایگاه داده");
         this->close();
     }
+
+    init_user_cars();
 }
 
 MainWindow::~MainWindow()
@@ -259,6 +261,43 @@ QString MainWindow::release_access_token(QString access_token)
         return "error";
     }
 
+}
+
+void MainWindow::init_user_cars()
+{
+
+
+    QStandardItem *root = model.invisibleRootItem();
+    QStringList headers;
+    headers << "";
+    model.setHorizontalHeaderLabels(headers);
+
+    QSqlQuery query;
+    QString command = "SELECT id, full_name FROM users";
+
+
+    if(!query.exec(command)) return;
+    while(query.next()){
+
+        QSqlQuery query_cars;
+        QString command_cars = "SELECT id, name FROM cars WHERE user_id = :user_id";
+        query_cars.prepare(command_cars);
+        query_cars.bindValue(":user_id" , query.value(0).toInt());
+
+        //parent item
+        QStandardItem *parent = new QStandardItem(query.value(1).toString());
+
+        if(!query_cars.exec()) break;
+        if(query_cars.size() == 0) continue;
+
+        while(query_cars.next()){
+            //child item
+            QStandardItem *child = new QStandardItem(query_cars.value(1).toString());
+            parent->appendRow(child);
+        }
+        root->appendRow(parent);
+    }
+    ui->treeUserCars->setModel(&model);
 }
 
 

@@ -23,7 +23,7 @@
       <x>440</x>
       <y>40</y>
       <width>141</width>
-      <height>141</height>
+      <height>191</height>
      </rect>
     </property>
    </widget>
@@ -47,6 +47,36 @@
      <string>کاربران آنلاین</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>10</y>
+      <width>201</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>IRANSans</family>
+      <pointsize>10</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>خودرو های ثبت شده به تفکیک کاربر</string>
+    </property>
+   </widget>
+   <widget class="QTreeView" name="treeUserCars">
+    <property name="geometry">
+     <rect>
+      <x>35</x>
+      <y>40</y>
+      <width>341</width>
+      <height>192</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -63,7 +93,6 @@
     </property>
     <addaction name="show_all_users"/>
     <addaction name="add_new_user"/>
-    <addaction name="show_logs"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -90,11 +119,6 @@
   <action name="add_new_user">
    <property name="text">
     <string>افزودن کاربر جدید</string>
-   </property>
-  </action>
-  <action name="show_logs">
-   <property name="text">
-    <string>مشاهده تاریخچه عملیات کاربران</string>
    </property>
   </action>
   <action name="exit_app">

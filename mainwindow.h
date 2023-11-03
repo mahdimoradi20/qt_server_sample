@@ -17,8 +17,10 @@
 #include<QJsonArray>
 #include<QJsonObject>
 #include<QJsonDocument>
-
+#include<QStandardItem>
+#include<QStandardItemModel>
 #include<QStringList>
+
 #include "showcardsdialog.h"
 
 QT_BEGIN_NAMESPACE
@@ -44,6 +46,7 @@ private slots:
 
     void on_action_triggered();
 
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
@@ -51,5 +54,7 @@ private:
     QString register_new_access_token(int user_id);
     int validate_access_token(QString access_token);
     QString release_access_token(QString access_token);
+    void init_user_cars();
+    QStandardItemModel model;
 };
 #endif // MAINWINDOW_H
