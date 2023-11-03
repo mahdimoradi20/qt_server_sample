@@ -52,7 +52,8 @@ void MainWindow::on_show_all_users_triggered()
 
 void MainWindow::data_recived(QJsonDocument data , QTcpSocket *socket)
 {
-    qInfo() << data["action"].toString();
+    qInfo() << data;
+
     if(data["action"].toString() == "login"){
 
         ui->statusbar->showMessage("اعتبار سنجی کاربر جدید..." , 3000 ) ;
@@ -101,9 +102,57 @@ void MainWindow::data_recived(QJsonDocument data , QTcpSocket *socket)
         map.insert("message" ,message);
         map.insert("access_token" ,token);
         map.insert("full_name" ,full_name);
+        map.insert("action" ,"login");
         server.send(map , socket);
 
 
+
+    }
+    else if(data["action"].toString() == "submit_form"){
+
+        QVariantMap map;
+        QString status = "";
+        QString message = "";
+
+        ui->statusbar->showMessage("ثبت خودرو جدید..." , 3000 ) ;
+
+        int user_id = validate_access_token(data["access_token"].toString());
+
+        if(user_id == 0){
+            status = "error";
+            message = "access denied";
+        }else{
+            QSqlQuery query;
+            QString command = "INSERT INTO cars (user_id , year,full_name , gender , name , color , place , national_code , address , passenger_count , health) VALUES (:user_id , :year ,:full_name , :gender , :name , :color , :place , :national_code , :address , :passenger_count , :health) ";
+
+            query.prepare(command);
+            query.bindValue(":full_name" , data["full_name"].toString());
+            query.bindValue(":gender" , data["gender"].toString());
+            query.bindValue(":name" , data["name"].toString());
+            query.bindValue(":color" , data["color"].toString());
+            query.bindValue(":place" , data["place"].toString());
+            query.bindValue(":national_code" , data["national_code"].toString());
+            query.bindValue(":address" , data["address"].toString());
+            query.bindValue(":passenger_count" , data["passenger_count"].toInt());
+            query.bindValue(":health" , data["health"].toInt());
+             query.bindValue(":year" , data["year"].toInt());
+
+            query.bindValue(":user_id" , user_id);
+
+            if(query.exec()){
+                status = "ok";
+                message = "form has been saved";
+
+            }else{
+                status = "error";
+                message = "something went wrong";
+            }
+        }
+
+        map.insert("status" , status);
+        map.insert("message" ,message);
+        map.insert("action" ,"submit_form");
+        server.send(map , socket);
 
     }
 }
@@ -122,6 +171,26 @@ QString MainWindow::register_new_access_token(int user_id)
 
     if(query.exec())return token;
     else return "error";
+
+}
+
+int MainWindow::validate_access_token(QString access_token)
+{
+    QSqlQuery query;
+    QString command = "SELECT id , user_id FROM user_access_tokens WHERE token = :token";
+
+    query.prepare(command);
+    query.bindValue(":token" , access_token);
+
+    if(query.exec()){
+        if(query.size() > 0) {
+            query.next() ;
+            return query.value(1).toInt();
+        }
+        else return 0;
+    }else{
+        return 0;
+    }
 
 }
 
