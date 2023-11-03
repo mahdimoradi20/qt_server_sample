@@ -135,8 +135,7 @@ void MainWindow::data_recived(QJsonDocument data , QTcpSocket *socket)
             query.bindValue(":address" , data["address"].toString());
             query.bindValue(":passenger_count" , data["passenger_count"].toInt());
             query.bindValue(":health" , data["health"].toInt());
-             query.bindValue(":year" , data["year"].toInt());
-
+            query.bindValue(":year" , data["year"].toInt());
             query.bindValue(":user_id" , user_id);
 
             if(query.exec()){
@@ -192,5 +191,12 @@ int MainWindow::validate_access_token(QString access_token)
         return 0;
     }
 
+}
+
+
+void MainWindow::on_action_triggered()
+{
+    showCardsDialog *dialog = new showCardsDialog(this);
+    dialog->show();
 }
 

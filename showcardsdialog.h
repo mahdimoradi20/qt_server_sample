@@ -1,5 +1,5 @@
-#ifndef SHOWUSERSDIALOG_H
-#define SHOWUSERSDIALOG_H
+#ifndef SHOWCARDSDIALOG_H
+#define SHOWCARDSDIALOG_H
 
 #include <QDialog>
 
@@ -12,28 +12,24 @@
 #include<QStandardItemModel>
 
 namespace Ui {
-class ShowUsersDialog;
+class showCardsDialog;
 }
 
-class ShowUsersDialog : public QDialog
+class showCardsDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit ShowUsersDialog(QWidget *parent = nullptr);
-    ~ShowUsersDialog();
-
-private slots:
-
+    explicit showCardsDialog(QWidget *parent = nullptr);
+    ~showCardsDialog();
 
 private:
-    Ui::ShowUsersDialog *ui;
+    Ui::showCardsDialog *ui;
+
     QSqlDatabase db;
     QStandardItemModel model;
-    void init_users();
+    void init_cars();
     QString gregorian_to_jalali(long gy, long gm, long gd);
-
-
 };
 
-#endif // SHOWUSERSDIALOG_H
+#endif // SHOWCARDSDIALOG_H

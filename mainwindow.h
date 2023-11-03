@@ -19,6 +19,7 @@
 #include<QJsonDocument>
 
 #include<QStringList>
+#include "showcardsdialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -40,6 +41,8 @@ private slots:
     void on_show_all_users_triggered();
 
     void data_recived(QJsonDocument data , QTcpSocket *socket);
+
+    void on_action_triggered();
 
 private:
     Ui::MainWindow *ui;

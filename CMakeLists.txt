@@ -26,6 +26,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         adduserdialog.h adduserdialog.cpp adduserdialog.ui
         showusersdialog.h showusersdialog.cpp showusersdialog.ui
         server.h server.cpp
+        showcardsdialog.h showcardsdialog.cpp showcardsdialog.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET server_test1 APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
