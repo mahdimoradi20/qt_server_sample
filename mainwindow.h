@@ -50,5 +50,6 @@ private:
     Server server;
     QString register_new_access_token(int user_id);
     int validate_access_token(QString access_token);
+    QString release_access_token(QString access_token);
 };
 #endif // MAINWINDOW_H

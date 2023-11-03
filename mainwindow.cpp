@@ -46,6 +46,9 @@ void MainWindow::on_add_new_user_triggered()
 
 void MainWindow::on_show_all_users_triggered()
 {
+
+
+
     ShowUsersDialog *dialog = new ShowUsersDialog(this);
     dialog->show();
 }
@@ -88,6 +91,8 @@ void MainWindow::data_recived(QJsonDocument data , QTcpSocket *socket)
                 if(token == "error"){
                     status = "error";
                     message = "cannot specify token try again later";
+                }else{
+                    ui->listOnlineUsers->addItem("کاربر " + full_name);
                 }
             }else{
                 status = "error";
@@ -153,6 +158,40 @@ void MainWindow::data_recived(QJsonDocument data , QTcpSocket *socket)
         map.insert("action" ,"submit_form");
         server.send(map , socket);
 
+    }else if(data["action"].toString() == "logout"){
+
+
+        QVariantMap map;
+        QString status = "";
+        QString message = "";
+
+        QString access_token = data["access_token"].toString();
+
+        QString result = release_access_token(access_token);
+
+        if(result == "error"){
+            status = "error";
+            message = "somrthing went wrong";
+        }else if(result == "none"){
+            status = "error";
+            message = "not a valid access token";
+        }else{
+            status = "ok";
+            message = "log out safely";
+        }
+
+
+        QList<QListWidgetItem*> items = ui->listOnlineUsers->findItems(result , Qt::MatchContains);
+        foreach (QListWidgetItem* item, items) {
+            int row = ui->listOnlineUsers->row(item);
+            ui->listOnlineUsers->takeItem(row);
+        }
+        map.insert("status" , status);
+        map.insert("message" ,message);
+        map.insert("action" ,"logout");
+
+
+        server.send(map , socket);
     }
 }
 
@@ -192,6 +231,36 @@ int MainWindow::validate_access_token(QString access_token)
     }
 
 }
+
+QString MainWindow::release_access_token(QString access_token)
+{
+    QSqlQuery query;
+    QString command = "SELECT user_access_tokens.id , users.id as user_id , users.full_name FROM user_access_tokens , users WHERE user_access_tokens.user_id = users.id  AND  user_access_tokens.token = :token";
+
+    query.prepare(command);
+    query.bindValue(":token" , access_token);
+
+    if(query.exec()){
+        if(query.size() > 0) {
+            query.next() ;
+            int token_id = query.value(0).toInt();
+            QString full_name = query.value(2).toString();
+            command = "DELETE FROM user_access_tokens WHERE id = :token_id";
+            query.prepare(command);
+            query.bindValue(":token_id" , token_id);
+            if(query.exec()){
+                return full_name;
+            }else{
+                return "error";
+            }
+        }
+        else return "none";
+    }else{
+        return "error";
+    }
+
+}
+
 
 
 void MainWindow::on_action_triggered()
