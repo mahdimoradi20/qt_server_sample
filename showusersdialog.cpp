@@ -110,3 +110,30 @@ QString ShowUsersDialog::gregorian_to_jalali(long gy, long gm, long gd)
 
 
 
+
+void ShowUsersDialog::on_btnDelete_clicked()
+{
+    if(ui->textUserId->text() == ""){
+        QMessageBox::warning(this , "اخطار" , "لطفا شناسه ای را وارد کنید");
+        return;
+    }
+
+    QMessageBox::StandardButton reply = QMessageBox::question(this,"خروج" , "آیا از حذف کاربر مطمئن هستید؟");
+    if (reply == QMessageBox::No) return;
+
+    int user_id = ui->textUserId->text().toInt();
+    QSqlQuery query;
+    QString command = "DELETE FROM users WHERE id = :user_id";
+    query.prepare(command);
+    query.bindValue(":user_id" , user_id);
+    if(!query.exec()){
+        QMessageBox::critical(this , "خطا" , "در هنگام حذف کاربر خطایی پیش آمد");
+        return;
+    }
+    else{
+        QMessageBox::information(this , "موفق" , "کاربر با موفقیت حذف شد");
+        this->close();
+    }
+
+}
+

@@ -6,41 +6,89 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>655</width>
     <height>420</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <family>IRANSans</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>مشاهده کاربران سیستم</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTableView" name="tblUsers">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="font">
+      <font>
+       <family>IRANSans</family>
+      </font>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::RightToLeft</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QPushButton" name="btnDelete">
        <property name="font">
         <font>
          <family>IRANSans</family>
-         <pointsize>11</pointsize>
         </font>
        </property>
        <property name="text">
-        <string>مشاهده کاربران سیستم</string>
+        <string>تایید حذف</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QTableView" name="tblUsers">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
+      <widget class="QLabel" name="label_3">
        <property name="font">
         <font>
          <family>IRANSans</family>
+         <pointsize>10</pointsize>
         </font>
        </property>
-       <property name="layoutDirection">
-        <enum>Qt::RightToLeft</enum>
+       <property name="text">
+        <string>حذف شود</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="textUserId">
+       <property name="inputMask">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="font">
+        <font>
+         <family>IRANSans</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>کاربر با شناسه</string>
        </property>
       </widget>
      </item>
